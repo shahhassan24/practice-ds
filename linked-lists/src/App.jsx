@@ -1,131 +1,92 @@
-import { useState } from 'react'
-
-import { Canvas } from './components/shared/Canvas'
-import { LinkedList } from './components/LinkedList'
-import { InputField } from './components/shared/InputField'
-import { SharedButton } from './components/shared/SharedButton'
-
-
-const linkedList = LinkedList()
+import { Canvas } from '@react-three/fiber'
+import LinkedList from './components/LinkedList/helper';
+import { OrbitControls, GizmoHelper, GizmoViewport, KeyboardControls, Text } from "@react-three/drei";
+import Scene from './helpers/Scene';
+import Sidebar from './components/Sidebar';
+import * as THREE from 'three';
+import { useState, useRef } from 'react';
 
 function App() {
-  const { add, remove, getIndex } = linkedList
 
-  const [value, setValue] = useState("")
-  const [renderState, setRenderState] = useState(false)
+  const map = [
+    { name: "forward", keys: ["w", "ArrowUp"] },
+    { name: "backward", keys: ["s", "ArrowDown"] },
+    { name: "left", keys: ["a", "ArrowLeft"] },
+    { name: "right", keys: ["d", "ArrowRight"] },
+  ];
 
-  const onChange = (e) => {
-    setValue(e.target.value)
-  }
 
-  const onAdd = () => {
-    if (value === "") return
-    add(parseInt(value))
-    setValue("")
-    setRenderState(prev => prev + 1)
-  }
+  // Initialize the list using useRef so it survives re-renders
+  const linkedListRef = useRef(new LinkedList());
+  const [triggerCount, setTriggerCount] = useState(0);
 
-  const onRemove = () => {
-    if (value === "") return
-    console.log("this is remove value", value)
-    remove(parseInt(value))
-    setValue("")
-    setRenderState(prev => prev + 1)
+  const head = linkedListRef.current.getAll()
+  let size = linkedListRef.current.getSize()
+  console.log("this is running, size:", size)
 
-  }
+  const createLinkedList = (size, head, index = 0, xOffset = 0) => {
+    if (size === 0) return null
 
-  const onGetIndex = () => {
-    if (value === "") return
-    let index = getIndex(parseInt(value))
-    setValue("")
-    setRenderState(prev => prev + 1)
-    alert(index)
+    const boxSize = 1;
+    const gap = 2;
+
+    const arrowDir = new THREE.Vector3(1, 0, 0);
+    const arrowOrigin = new THREE.Vector3(xOffset + boxSize / 2, 1, 0);
+    const arrowLength = gap - boxSize;
+
+    return (
+      <group key={index}>
+        <mesh position={[xOffset, 1, 0]}>
+          <boxGeometry args={[boxSize, boxSize, boxSize]} />
+          <meshPhongMaterial color="#4A90E2" />
+        </mesh>
+
+        <Text
+          position={[xOffset, 1, boxSize / 2 + 0.01]}
+          fontSize={0.4}
+          color="white"
+          anchorX="center"
+          anchorY="middle"
+        >
+          {head.data}
+        </Text>
+
+        {size > 1 && (
+          <primitive object={new THREE.ArrowHelper(arrowDir, arrowOrigin, arrowLength, 0xffff00, 0.3, 0.2)} />
+        )}
+
+        {createLinkedList(size - 1, head.next, index + 1, xOffset + gap)}
+      </group>
+    )
   }
 
   return (
-    <div className="relative w-full h-full flex">
-      {/* Sidebar Control Panel */}
-      <div className="w-72 h-full z-10 flex-shrink-0">
-        <div className="glass-panel h-full px-6 py-8 flex flex-col gap-8 border-r border-white/10">
-          {/* Header */}
-          <div className="flex flex-col gap-1">
-            <h1 className="text-xl font-bold tracking-tight glow-text bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
-              Linked List Visualizer
-            </h1>
-            <p className="text-[10px] text-zinc-500 font-medium uppercase tracking-[0.2em]">
-              Data Structure Experience
-            </p>
-          </div>
-
-          {/* Controls */}
-          <div className="flex flex-col gap-6">
-            {/* Add Node Section */}
-            <div className="flex flex-col gap-3">
-              <label className="text-xs text-zinc-400 font-medium uppercase tracking-wider">
-                Add Node
-              </label>
-              <InputField
-                type="number"
-                placeholder="Enter value"
-                value={value}
-                onChange={onChange}
-              />
-              <SharedButton onClick={onAdd} className="w-full">
-                Push Node
-              </SharedButton>
-            </div>
-
-            {/* Divider */}
-            <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-
-            {/* Remove Node Section */}
-            <div className="flex flex-col gap-3">
-              <label className="text-xs text-zinc-400 font-medium uppercase tracking-wider">
-                Remove Node
-              </label>
-              <InputField
-                type="number"
-                placeholder="Enter value"
-                value={value}
-                onChange={onChange}
-              />
-              <SharedButton onClick={onRemove} className="w-full">
-                Remove Node
-              </SharedButton>
-            </div>
-
-            <div className="flex flex-col gap-3">
-              <label className="text-xs text-zinc-400 font-medium uppercase tracking-wider">
-                Get Index
-              </label>
-              <InputField
-                type="number"
-                placeholder="Enter value"
-                value={value}
-                onChange={onChange}
-              />
-              <SharedButton onClick={onGetIndex} className="w-full">
-                Get Index
-              </SharedButton>
-            </div>
-          </div>
-
-          {/* Footer Status - pushed to bottom */}
-          <div className="mt-auto">
-            <div className="glass-panel px-4 py-2 rounded-full border-white/5">
-              <p className="text-[10px] text-zinc-500 font-mono text-center">
-                STATUS: STRUCTURE
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div style={{ width: "100vw", height: "100vh", display: "flex", backgroundColor: "#121212" }}>
+      <Sidebar
+        linkedListInstance={linkedListRef.current}
+        onListUpdate={() => setTriggerCount(prev => prev + 1)}
+      />
 
       {/* Canvas Area */}
-      <div className="flex-1 relative">
-        <div className="absolute inset-0 pointer-events-auto">
-          <Canvas data={linkedList.getHead()} key={renderState} />
-        </div>
+      <div style={{ flex: 1, position: "relative" }}>
+
+        <KeyboardControls map={map}>
+          <Canvas camera={{ position: [0, 0, 10] }}>
+
+            <GizmoHelper alignment='bottom-left'>
+              <GizmoViewport />
+            </GizmoHelper>
+            <gridHelper args={[20, 20, 0x444444, 0x222222]} />
+            <ambientLight intensity={0.5} />
+            <directionalLight position={[5, 10, 5]} color="white" intensity={1} />
+
+            {createLinkedList(size, head)}
+
+            <OrbitControls />
+            <Scene />
+
+          </Canvas>
+        </KeyboardControls>
       </div>
     </div>
   )
