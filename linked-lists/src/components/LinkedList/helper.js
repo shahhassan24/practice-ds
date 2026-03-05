@@ -27,6 +27,14 @@ class LinkedList {
         this.size++
     }
 
+    addAtStart(data) {
+        const newNode = new Node(data)
+        var currentNode = this.head
+        newNode.next = currentNode
+        this.head = newNode
+        this.size++
+    }
+
     getAll() {
         return this.head;
     }
@@ -65,6 +73,7 @@ class LinkedList {
             currentNode = currentNode.next
         }
     }
+
 }
 
 export default LinkedList

@@ -2,14 +2,33 @@ import { useState } from "react";
 
 const Sidebar = ({ linkedListInstance, onListUpdate }) => {
     const [value, setValue] = useState('');
+    const [removeValue, setRemoveValue] = useState('')
+    const [atAtStartValue, setAtStartValue] = useState('')
 
     const callAdd = () => {
         if (!value) return;
-
-        console.log("this is call add", value)
         linkedListInstance.add(value)
         setValue('');
 
+        if (onListUpdate) {
+            onListUpdate();
+        }
+    }
+
+    const callRemove = () => {
+        if (!removeValue) return;
+        linkedListInstance.remove(removeValue)
+        setRemoveValue('');
+
+        if (onListUpdate) {
+            onListUpdate();
+        }
+    }
+
+    const addAtStart = () => {
+        if (!atAtStartValue) return;
+        linkedListInstance.addAtStart(atAtStartValue)
+        setAtStartValue('')
         if (onListUpdate) {
             onListUpdate();
         }
@@ -38,6 +57,8 @@ const Sidebar = ({ linkedListInstance, onListUpdate }) => {
                 </p>
             </div>
 
+            {/* ADD NODE */}
+
             <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "10px" }}>
                 <label htmlFor="nodeValue" style={{ fontSize: "0.9rem", color: "#bbb", fontWeight: "500" }}>
                     Add Node
@@ -61,7 +82,115 @@ const Sidebar = ({ linkedListInstance, onListUpdate }) => {
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
                 />
-                <button onClick={callAdd}>add</button>
+                <button
+                    onClick={callAdd}
+                    style={{
+                        padding: "10px",
+                        borderRadius: "8px",
+                        border: "none",
+                        backgroundColor: "#4A90E2",
+                        color: "white",
+                        fontSize: "0.95rem",
+                        fontWeight: "600",
+                        cursor: "pointer",
+                        marginTop: "4px",
+                        transition: "background-color 0.2s"
+                    }}
+                    onMouseEnter={(e) => e.target.style.backgroundColor = "#357ABD"}
+                    onMouseLeave={(e) => e.target.style.backgroundColor = "#4A90E2"}
+                >
+                    Add Node
+                </button>
+            </div>
+
+            {/* REMOVE NODE */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "10px" }}>
+                <label htmlFor="nodeValue" style={{ fontSize: "0.9rem", color: "#bbb", fontWeight: "500" }}>
+                    Remove Node
+                </label>
+                <input
+                    id="nodeValue"
+                    type="text"
+                    placeholder="Type value here..."
+                    style={{
+                        padding: "12px",
+                        borderRadius: "8px",
+                        border: "1px solid #444",
+                        backgroundColor: "#2a2a2a",
+                        color: "white",
+                        fontSize: "1rem",
+                        outline: "none",
+                        transition: "border-color 0.2s"
+                    }}
+                    onFocus={(e) => e.target.style.borderColor = "#4A90E2"}
+                    onBlur={(e) => e.target.style.borderColor = "#444"}
+                    value={removeValue}
+                    onChange={(e) => setRemoveValue(e.target.value)}
+                />
+                <button
+                    onClick={callRemove}
+                    style={{
+                        padding: "10px",
+                        borderRadius: "8px",
+                        border: "none",
+                        backgroundColor: "#E24A4A",
+                        color: "white",
+                        fontSize: "0.95rem",
+                        fontWeight: "600",
+                        cursor: "pointer",
+                        marginTop: "4px",
+                        transition: "background-color 0.2s"
+                    }}
+                    onMouseEnter={(e) => e.target.style.backgroundColor = "#C93030"}
+                    onMouseLeave={(e) => e.target.style.backgroundColor = "#E24A4A"}
+                >
+                    Remove Node
+                </button>
+            </div>
+
+            {/* ADD AT START NODE */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "10px" }}>
+                <label htmlFor="nodeValue" style={{ fontSize: "0.9rem", color: "#bbb", fontWeight: "500" }}>
+                    ADD At Start Node
+                </label>
+                <input
+                    id="nodeValue"
+                    type="text"
+                    placeholder="Type value here..."
+                    style={{
+                        padding: "12px",
+                        borderRadius: "8px",
+                        border: "1px solid #444",
+                        backgroundColor: "#2a2a2a",
+                        color: "white",
+                        fontSize: "1rem",
+                        outline: "none",
+                        transition: "border-color 0.2s"
+                    }}
+                    onFocus={(e) => e.target.style.borderColor = "#4A90E2"}
+                    onBlur={(e) => e.target.style.borderColor = "#444"}
+                    value={atAtStartValue}
+                    onChange={(e) => setAtStartValue(e.target.value)}
+                />
+                <button
+                    onClick={addAtStart}
+                    style={{
+                        padding: "10px",
+                        borderRadius: "8px",
+                        border: "none",
+                        backgroundColor: "#E24A4A",
+                        color: "white",
+                        fontSize: "0.95rem",
+                        fontWeight: "600",
+                        cursor: "pointer",
+                        marginTop: "4px",
+                        transition: "background-color 0.2s"
+                    }}
+                    onMouseEnter={(e) => e.target.style.backgroundColor = "#C93030"}
+                    onMouseLeave={(e) => e.target.style.backgroundColor = "#E24A4A"}
+                >
+                    Add At start Node
+                </button>
             </div>
         </div>
     );
