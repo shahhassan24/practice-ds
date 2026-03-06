@@ -22,7 +22,7 @@ function App() {
 
   const head = linkedListRef.current.getAll()
   let size = linkedListRef.current.getSize()
-  console.log("this is running, size:", size)
+  // console.log("this is running, size:", orderReverse)
 
   const createLinkedList = (size, head, index = 0, xOffset = 0) => {
     if (size === 0) return null

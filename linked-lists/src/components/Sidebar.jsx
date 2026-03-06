@@ -7,6 +7,12 @@ const Sidebar = ({ linkedListInstance, onListUpdate }) => {
     const [insertAtValue, setInsertAtValue] = useState('')
     const [insertValue, setInsertValue] = useState('')
 
+    const reverseLinkedList = () => {
+        linkedListInstance.reverseLinkedList()
+        if (onListUpdate) {
+            onListUpdate();
+        }
+    }
 
     const callAdd = () => {
         if (!value) return;
@@ -51,6 +57,7 @@ const Sidebar = ({ linkedListInstance, onListUpdate }) => {
     return (
         <div style={{
             width: "300px",
+            height: "100%",
             backgroundColor: "#1e1e1e",
             color: "white",
             padding: "24px",
@@ -60,7 +67,8 @@ const Sidebar = ({ linkedListInstance, onListUpdate }) => {
             gap: "20px",
             borderRight: "1px solid #333",
             boxShadow: "2px 0 10px rgba(0,0,0,0.5)",
-            zIndex: 10
+            zIndex: 10,
+            overflowY: "auto"
         }}>
             <div>
                 <h2 style={{ margin: "0 0 8px 0", fontSize: "1.4rem", fontWeight: "600", color: "#E0E0E0" }}>
@@ -270,6 +278,27 @@ const Sidebar = ({ linkedListInstance, onListUpdate }) => {
                     Add At Index Node
                 </button>
             </div>
+
+            <button
+                onClick={reverseLinkedList}
+                style={{
+                    padding: "10px",
+                    borderRadius: "8px",
+                    border: "none",
+                    backgroundColor: "#E24A4A",
+                    color: "white",
+                    fontSize: "0.95rem",
+                    fontWeight: "600",
+                    cursor: "pointer",
+                    marginTop: "4px",
+                    transition: "background-color 0.2s"
+                }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = "#C93030"}
+                onMouseLeave={(e) => e.target.style.backgroundColor = "#E24A4A"}
+            >
+                reverse
+            </button>
+
         </div>
     );
 };

@@ -7,6 +7,14 @@ class Node {
     }
 }
 
+class DoubleNode {
+    constructor(data) {
+        this.data = data;
+        this.prev = null;
+        this.next = null
+    }
+}
+
 class LinkedList {
     constructor() {
         this.head = null;
@@ -100,6 +108,59 @@ class LinkedList {
         }
 
         console.log("this size", this.size)
+    }
+
+    reverseLinkedList() {
+        var currentNode = this.head;
+        var previous = null
+        var next = null
+
+        while (currentNode) {
+            next = currentNode.next;
+            currentNode.next = previous
+            previous = currentNode;
+            currentNode = next
+        }
+        this.head = previous;
+    }
+
+    findMiddle() {
+        if (!this.head) return null
+        let currentNode = this.head;
+        let index = Math.floor(this.size / 2);
+
+        for (let i = 0; i < index; i++) {
+            currentNode = currentNode.next;
+        }
+        return currentNode.data
+    }
+
+    // Floyd’s Tortoise and Hare (fast & slow pointer)
+    detectCycle() {
+        let fast = this.head;
+        let slow = this.head;
+
+        while (fast && fast.next) {
+            slow = slow.next;
+            fast = fast.next.next
+            if (slow === fast) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+}
+
+class DoubleLinkedList {
+    constructor() {
+        this.head = null
+        this.size = 0
+    }
+
+    add() {
+
     }
 
 }
