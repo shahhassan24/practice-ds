@@ -133,9 +133,15 @@ function App() {
             <ambientLight intensity={0.5} />
             <directionalLight position={[5, 10, 5]} color="white" intensity={1} />
 
-            {createLinkedList(size, head)}
+            {/* Render Singly Linked List at Z = 0 */}
+            <group position={[0, 0, 0]}>
+              {createLinkedList(size, head)}
+            </group>
 
-            {createDoublyLinkedList(doublysize, doublyHead)}
+            {/* Render Doubly Linked List shifted forward on Z axis (e.g. Z = 3) */}
+            <group position={[0, 0, 3]}>
+              {createDoublyLinkedList(doublysize, doublyHead)}
+            </group>
 
             <OrbitControls />
             <Scene />

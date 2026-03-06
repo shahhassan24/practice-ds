@@ -9,10 +9,20 @@ const Sidebar = ({ linkedListInstance, onListUpdate, doublyLinkedListInstance })
     const [insertValue, setInsertValue] = useState('')
 
 
+
     //doubly linkedlist
 
     const [dvalue, setdValue] = useState()
+    const [dvalue2, setdValue2] = useState()
 
+
+    const removeDoublyLinkedList = () => {
+        if (!dvalue2) return;
+        doublyLinkedListInstance.remove(dvalue2)
+        if (onListUpdate) {
+            onListUpdate();
+        }
+    }
     const addDoublyLinkedList = () => {
         if (!dvalue) return;
         doublyLinkedListInstance.add(dvalue)
@@ -366,7 +376,7 @@ const Sidebar = ({ linkedListInstance, onListUpdate, doublyLinkedListInstance })
                 <>
                     <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "10px" }}>
                         <label htmlFor="doublyDummy" style={{ fontSize: "0.9rem", color: "#bbb", fontWeight: "500" }}>
-                            Doubly Action 1 (Dummy)
+                            ADD for Double Linked List
                         </label>
                         <input
                             id="doublyDummy"
@@ -401,6 +411,46 @@ const Sidebar = ({ linkedListInstance, onListUpdate, doublyLinkedListInstance })
                             onClick={addDoublyLinkedList}
                         >
                             ADD
+                        </button>
+                    </div>
+
+                    <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "10px" }}>
+                        <label htmlFor="doublyDummy" style={{ fontSize: "0.9rem", color: "#bbb", fontWeight: "500" }}>
+                            Remove for Double Linked List
+                        </label>
+                        <input
+                            id="doublyDummy"
+                            type="text"
+                            placeholder="Type dummy value here..."
+                            style={{
+                                padding: "12px",
+                                borderRadius: "8px",
+                                border: "1px solid #444",
+                                backgroundColor: "#2a2a2a",
+                                color: "white",
+                                fontSize: "1rem",
+                                outline: "none",
+                                transition: "border-color 0.2s"
+                            }}
+                            value={dvalue2}
+                            onChange={(e) => setdValue2(e.target.value)}
+                        />
+                        <button
+                            style={{
+                                padding: "10px",
+                                borderRadius: "8px",
+                                border: "none",
+                                backgroundColor: "#E24A4A",
+                                color: "white",
+                                fontSize: "0.95rem",
+                                fontWeight: "600",
+                                cursor: "pointer",
+                                marginTop: "4px",
+                                transition: "background-color 0.2s"
+                            }}
+                            onClick={removeDoublyLinkedList}
+                        >
+                            Remove
                         </button>
                     </div>
                 </>

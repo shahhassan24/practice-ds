@@ -189,6 +189,31 @@ class DoubleLinkedList {
         return this.size
     }
 
+    remove(data) {
+        let currentNode = this.head;
+
+        while (currentNode) {
+            if (currentNode.data == data) {
+                if (currentNode.prev) {
+                    currentNode.prev.next = currentNode.next;
+                } else {
+                    this.head = currentNode.next
+                }
+
+
+                if (currentNode.next) {
+                    currentNode.next.prev = currentNode.prev;
+                }
+
+                this.size--;
+                return;
+            }
+            // prev = currentNode
+            currentNode = currentNode.next
+
+        }
+    }
+
 }
 
 export default LinkedList;
