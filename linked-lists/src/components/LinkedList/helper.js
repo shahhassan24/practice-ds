@@ -74,6 +74,34 @@ class LinkedList {
         }
     }
 
+    insertAt(index, data) {
+        if (index < 0) return
+        var newNode = new Node(data);
+        var currentNode = this.head
+        let currentIndex = 0;
+        console.log("this is test", this.size, index, this.size == (index - 1))
+        if (index == 0) {
+            this.addAtStart(data)
+        } else if (this.size == (index - 1)) {
+            this.add(data)
+        } else {
+            let prev = null;
+            while (currentNode) {
+                if (currentIndex == index) {
+                    prev.next = newNode;
+                    newNode.next = currentNode
+                    this.size++
+                    break;
+                }
+                currentIndex++
+                prev = currentNode
+                currentNode = currentNode.next
+            }
+        }
+
+        console.log("this size", this.size)
+    }
+
 }
 
 export default LinkedList

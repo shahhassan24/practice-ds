@@ -4,6 +4,9 @@ const Sidebar = ({ linkedListInstance, onListUpdate }) => {
     const [value, setValue] = useState('');
     const [removeValue, setRemoveValue] = useState('')
     const [atAtStartValue, setAtStartValue] = useState('')
+    const [insertAtValue, setInsertAtValue] = useState('')
+    const [insertValue, setInsertValue] = useState('')
+
 
     const callAdd = () => {
         if (!value) return;
@@ -29,6 +32,17 @@ const Sidebar = ({ linkedListInstance, onListUpdate }) => {
         if (!atAtStartValue) return;
         linkedListInstance.addAtStart(atAtStartValue)
         setAtStartValue('')
+        if (onListUpdate) {
+            onListUpdate();
+        }
+    }
+
+    const insertAt = () => {
+
+        if (!insertAtValue) return;
+        console.log("this is insert value", insertAtValue, insertValue)
+        linkedListInstance.insertAt(insertAtValue, insertValue)
+        setInsertAtValue('')
         if (onListUpdate) {
             onListUpdate();
         }
@@ -190,6 +204,70 @@ const Sidebar = ({ linkedListInstance, onListUpdate }) => {
                     onMouseLeave={(e) => e.target.style.backgroundColor = "#E24A4A"}
                 >
                     Add At start Node
+                </button>
+            </div>
+
+            {/* ADD AT Index NODE */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "10px" }}>
+                <label htmlFor="nodeValue" style={{ fontSize: "0.9rem", color: "#bbb", fontWeight: "500" }}>
+                    ADD At Index Node
+                </label>
+                <input
+                    id="nodeValue"
+                    type="text"
+                    placeholder="Type value here..."
+                    style={{
+                        padding: "12px",
+                        borderRadius: "8px",
+                        border: "1px solid #444",
+                        backgroundColor: "#2a2a2a",
+                        color: "white",
+                        fontSize: "1rem",
+                        outline: "none",
+                        transition: "border-color 0.2s"
+                    }}
+                    onFocus={(e) => e.target.style.borderColor = "#4A90E2"}
+                    onBlur={(e) => e.target.style.borderColor = "#444"}
+                    value={insertAtValue}
+                    onChange={(e) => setInsertAtValue(e.target.value)}
+                />
+                <input
+                    id="nodeValue"
+                    type="text"
+                    placeholder="Type value here..."
+                    style={{
+                        padding: "12px",
+                        borderRadius: "8px",
+                        border: "1px solid #444",
+                        backgroundColor: "#2a2a2a",
+                        color: "white",
+                        fontSize: "1rem",
+                        outline: "none",
+                        transition: "border-color 0.2s"
+                    }}
+                    onFocus={(e) => e.target.style.borderColor = "#4A90E2"}
+                    onBlur={(e) => e.target.style.borderColor = "#444"}
+                    value={insertValue}
+                    onChange={(e) => setInsertValue(e.target.value)}
+                />
+                <button
+                    onClick={insertAt}
+                    style={{
+                        padding: "10px",
+                        borderRadius: "8px",
+                        border: "none",
+                        backgroundColor: "#E24A4A",
+                        color: "white",
+                        fontSize: "0.95rem",
+                        fontWeight: "600",
+                        cursor: "pointer",
+                        marginTop: "4px",
+                        transition: "background-color 0.2s"
+                    }}
+                    onMouseEnter={(e) => e.target.style.backgroundColor = "#C93030"}
+                    onMouseLeave={(e) => e.target.style.backgroundColor = "#E24A4A"}
+                >
+                    Add At Index Node
                 </button>
             </div>
         </div>
