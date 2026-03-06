@@ -1,11 +1,26 @@
 import { useState } from "react";
 
-const Sidebar = ({ linkedListInstance, onListUpdate }) => {
+const Sidebar = ({ linkedListInstance, onListUpdate, doublyLinkedListInstance }) => {
+    const [activeTab, setActiveTab] = useState('singly');
     const [value, setValue] = useState('');
     const [removeValue, setRemoveValue] = useState('')
     const [atAtStartValue, setAtStartValue] = useState('')
     const [insertAtValue, setInsertAtValue] = useState('')
     const [insertValue, setInsertValue] = useState('')
+
+
+    //doubly linkedlist
+
+    const [dvalue, setdValue] = useState()
+
+    const addDoublyLinkedList = () => {
+        if (!dvalue) return;
+        doublyLinkedListInstance.add(dvalue)
+        if (onListUpdate) {
+            onListUpdate();
+        }
+
+    }
 
     const reverseLinkedList = () => {
         linkedListInstance.reverseLinkedList()
@@ -79,225 +94,317 @@ const Sidebar = ({ linkedListInstance, onListUpdate }) => {
                 </p>
             </div>
 
-            {/* ADD NODE */}
-
-            <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "10px" }}>
-                <label htmlFor="nodeValue" style={{ fontSize: "0.9rem", color: "#bbb", fontWeight: "500" }}>
-                    Add Node
-                </label>
-                <input
-                    id="nodeValue"
-                    type="text"
-                    placeholder="Type value here..."
-                    style={{
-                        padding: "12px",
-                        borderRadius: "8px",
-                        border: "1px solid #444",
-                        backgroundColor: "#2a2a2a",
-                        color: "white",
-                        fontSize: "1rem",
-                        outline: "none",
-                        transition: "border-color 0.2s"
-                    }}
-                    onFocus={(e) => e.target.style.borderColor = "#4A90E2"}
-                    onBlur={(e) => e.target.style.borderColor = "#444"}
-                    value={value}
-                    onChange={(e) => setValue(e.target.value)}
-                />
+            {/* TAB MENU */}
+            <div style={{ display: "flex", gap: "10px", marginTop: "10px", backgroundColor: "#2a2a2a", padding: "4px", borderRadius: "8px" }}>
                 <button
-                    onClick={callAdd}
+                    onClick={() => {
+                        setActiveTab('singly');
+                    }}
                     style={{
-                        padding: "10px",
-                        borderRadius: "8px",
+                        flex: 1,
+                        padding: "8px",
+                        borderRadius: "6px",
                         border: "none",
-                        backgroundColor: "#4A90E2",
-                        color: "white",
-                        fontSize: "0.95rem",
+                        backgroundColor: activeTab === 'singly' ? "#4A90E2" : "transparent",
+                        color: activeTab === 'singly' ? "white" : "#888",
+                        fontSize: "0.9rem",
                         fontWeight: "600",
                         cursor: "pointer",
-                        marginTop: "4px",
-                        transition: "background-color 0.2s"
+                        transition: "all 0.2s"
                     }}
-                    onMouseEnter={(e) => e.target.style.backgroundColor = "#357ABD"}
-                    onMouseLeave={(e) => e.target.style.backgroundColor = "#4A90E2"}
                 >
-                    Add Node
+                    Singly
+                </button>
+                <button
+                    onClick={() => {
+                        setActiveTab('doubly');
+                    }}
+                    style={{
+                        flex: 1,
+                        padding: "8px",
+                        borderRadius: "6px",
+                        border: "none",
+                        backgroundColor: activeTab === 'doubly' ? "#E24A4A" : "transparent",
+                        color: activeTab === 'doubly' ? "white" : "#888",
+                        fontSize: "0.9rem",
+                        fontWeight: "600",
+                        cursor: "pointer",
+                        transition: "all 0.2s"
+                    }}
+                >
+                    Doubly
                 </button>
             </div>
 
-            {/* REMOVE NODE */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "10px" }}>
-                <label htmlFor="nodeValue" style={{ fontSize: "0.9rem", color: "#bbb", fontWeight: "500" }}>
-                    Remove Node
-                </label>
-                <input
-                    id="nodeValue"
-                    type="text"
-                    placeholder="Type value here..."
-                    style={{
-                        padding: "12px",
-                        borderRadius: "8px",
-                        border: "1px solid #444",
-                        backgroundColor: "#2a2a2a",
-                        color: "white",
-                        fontSize: "1rem",
-                        outline: "none",
-                        transition: "border-color 0.2s"
-                    }}
-                    onFocus={(e) => e.target.style.borderColor = "#4A90E2"}
-                    onBlur={(e) => e.target.style.borderColor = "#444"}
-                    value={removeValue}
-                    onChange={(e) => setRemoveValue(e.target.value)}
-                />
-                <button
-                    onClick={callRemove}
-                    style={{
-                        padding: "10px",
-                        borderRadius: "8px",
-                        border: "none",
-                        backgroundColor: "#E24A4A",
-                        color: "white",
-                        fontSize: "0.95rem",
-                        fontWeight: "600",
-                        cursor: "pointer",
-                        marginTop: "4px",
-                        transition: "background-color 0.2s"
-                    }}
-                    onMouseEnter={(e) => e.target.style.backgroundColor = "#C93030"}
-                    onMouseLeave={(e) => e.target.style.backgroundColor = "#E24A4A"}
-                >
-                    Remove Node
-                </button>
-            </div>
+            {/* CONDITIONALLY RENDERED FOR SINGLY LINKED LIST */}
+            {activeTab === 'singly' && (
+                <>
+                    {/* ADD NODE */}
 
-            {/* ADD AT START NODE */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "10px" }}>
-                <label htmlFor="nodeValue" style={{ fontSize: "0.9rem", color: "#bbb", fontWeight: "500" }}>
-                    ADD At Start Node
-                </label>
-                <input
-                    id="nodeValue"
-                    type="text"
-                    placeholder="Type value here..."
-                    style={{
-                        padding: "12px",
-                        borderRadius: "8px",
-                        border: "1px solid #444",
-                        backgroundColor: "#2a2a2a",
-                        color: "white",
-                        fontSize: "1rem",
-                        outline: "none",
-                        transition: "border-color 0.2s"
-                    }}
-                    onFocus={(e) => e.target.style.borderColor = "#4A90E2"}
-                    onBlur={(e) => e.target.style.borderColor = "#444"}
-                    value={atAtStartValue}
-                    onChange={(e) => setAtStartValue(e.target.value)}
-                />
-                <button
-                    onClick={addAtStart}
-                    style={{
-                        padding: "10px",
-                        borderRadius: "8px",
-                        border: "none",
-                        backgroundColor: "#E24A4A",
-                        color: "white",
-                        fontSize: "0.95rem",
-                        fontWeight: "600",
-                        cursor: "pointer",
-                        marginTop: "4px",
-                        transition: "background-color 0.2s"
-                    }}
-                    onMouseEnter={(e) => e.target.style.backgroundColor = "#C93030"}
-                    onMouseLeave={(e) => e.target.style.backgroundColor = "#E24A4A"}
-                >
-                    Add At start Node
-                </button>
-            </div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "10px" }}>
+                        <label htmlFor="nodeValue" style={{ fontSize: "0.9rem", color: "#bbb", fontWeight: "500" }}>
+                            Add Node
+                        </label>
+                        <input
+                            id="nodeValue"
+                            type="text"
+                            placeholder="Type value here..."
+                            style={{
+                                padding: "12px",
+                                borderRadius: "8px",
+                                border: "1px solid #444",
+                                backgroundColor: "#2a2a2a",
+                                color: "white",
+                                fontSize: "1rem",
+                                outline: "none",
+                                transition: "border-color 0.2s"
+                            }}
+                            onFocus={(e) => e.target.style.borderColor = "#4A90E2"}
+                            onBlur={(e) => e.target.style.borderColor = "#444"}
+                            value={value}
+                            onChange={(e) => setValue(e.target.value)}
+                        />
+                        <button
+                            onClick={callAdd}
+                            style={{
+                                padding: "10px",
+                                borderRadius: "8px",
+                                border: "none",
+                                backgroundColor: "#4A90E2",
+                                color: "white",
+                                fontSize: "0.95rem",
+                                fontWeight: "600",
+                                cursor: "pointer",
+                                marginTop: "4px",
+                                transition: "background-color 0.2s"
+                            }}
+                            onMouseEnter={(e) => e.target.style.backgroundColor = "#357ABD"}
+                            onMouseLeave={(e) => e.target.style.backgroundColor = "#4A90E2"}
+                        >
+                            Add Node
+                        </button>
+                    </div>
 
-            {/* ADD AT Index NODE */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "10px" }}>
-                <label htmlFor="nodeValue" style={{ fontSize: "0.9rem", color: "#bbb", fontWeight: "500" }}>
-                    ADD At Index Node
-                </label>
-                <input
-                    id="nodeValue"
-                    type="text"
-                    placeholder="Type value here..."
-                    style={{
-                        padding: "12px",
-                        borderRadius: "8px",
-                        border: "1px solid #444",
-                        backgroundColor: "#2a2a2a",
-                        color: "white",
-                        fontSize: "1rem",
-                        outline: "none",
-                        transition: "border-color 0.2s"
-                    }}
-                    onFocus={(e) => e.target.style.borderColor = "#4A90E2"}
-                    onBlur={(e) => e.target.style.borderColor = "#444"}
-                    value={insertAtValue}
-                    onChange={(e) => setInsertAtValue(e.target.value)}
-                />
-                <input
-                    id="nodeValue"
-                    type="text"
-                    placeholder="Type value here..."
-                    style={{
-                        padding: "12px",
-                        borderRadius: "8px",
-                        border: "1px solid #444",
-                        backgroundColor: "#2a2a2a",
-                        color: "white",
-                        fontSize: "1rem",
-                        outline: "none",
-                        transition: "border-color 0.2s"
-                    }}
-                    onFocus={(e) => e.target.style.borderColor = "#4A90E2"}
-                    onBlur={(e) => e.target.style.borderColor = "#444"}
-                    value={insertValue}
-                    onChange={(e) => setInsertValue(e.target.value)}
-                />
-                <button
-                    onClick={insertAt}
-                    style={{
-                        padding: "10px",
-                        borderRadius: "8px",
-                        border: "none",
-                        backgroundColor: "#E24A4A",
-                        color: "white",
-                        fontSize: "0.95rem",
-                        fontWeight: "600",
-                        cursor: "pointer",
-                        marginTop: "4px",
-                        transition: "background-color 0.2s"
-                    }}
-                    onMouseEnter={(e) => e.target.style.backgroundColor = "#C93030"}
-                    onMouseLeave={(e) => e.target.style.backgroundColor = "#E24A4A"}
-                >
-                    Add At Index Node
-                </button>
-            </div>
+                    {/* REMOVE NODE */}
+                    <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "10px" }}>
+                        <label htmlFor="nodeValue" style={{ fontSize: "0.9rem", color: "#bbb", fontWeight: "500" }}>
+                            Remove Node
+                        </label>
+                        <input
+                            id="nodeValue"
+                            type="text"
+                            placeholder="Type value here..."
+                            style={{
+                                padding: "12px",
+                                borderRadius: "8px",
+                                border: "1px solid #444",
+                                backgroundColor: "#2a2a2a",
+                                color: "white",
+                                fontSize: "1rem",
+                                outline: "none",
+                                transition: "border-color 0.2s"
+                            }}
+                            onFocus={(e) => e.target.style.borderColor = "#4A90E2"}
+                            onBlur={(e) => e.target.style.borderColor = "#444"}
+                            value={removeValue}
+                            onChange={(e) => setRemoveValue(e.target.value)}
+                        />
+                        <button
+                            onClick={callRemove}
+                            style={{
+                                padding: "10px",
+                                borderRadius: "8px",
+                                border: "none",
+                                backgroundColor: "#E24A4A",
+                                color: "white",
+                                fontSize: "0.95rem",
+                                fontWeight: "600",
+                                cursor: "pointer",
+                                marginTop: "4px",
+                                transition: "background-color 0.2s"
+                            }}
+                            onMouseEnter={(e) => e.target.style.backgroundColor = "#C93030"}
+                            onMouseLeave={(e) => e.target.style.backgroundColor = "#E24A4A"}
+                        >
+                            Remove Node
+                        </button>
+                    </div>
 
-            <button
-                onClick={reverseLinkedList}
-                style={{
-                    padding: "10px",
-                    borderRadius: "8px",
-                    border: "none",
-                    backgroundColor: "#E24A4A",
-                    color: "white",
-                    fontSize: "0.95rem",
-                    fontWeight: "600",
-                    cursor: "pointer",
-                    marginTop: "4px",
-                    transition: "background-color 0.2s"
-                }}
-                onMouseEnter={(e) => e.target.style.backgroundColor = "#C93030"}
-                onMouseLeave={(e) => e.target.style.backgroundColor = "#E24A4A"}
-            >
-                reverse
-            </button>
+                    {/* ADD AT START NODE */}
+                    <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "10px" }}>
+                        <label htmlFor="nodeValue" style={{ fontSize: "0.9rem", color: "#bbb", fontWeight: "500" }}>
+                            ADD At Start Node
+                        </label>
+                        <input
+                            id="nodeValue"
+                            type="text"
+                            placeholder="Type value here..."
+                            style={{
+                                padding: "12px",
+                                borderRadius: "8px",
+                                border: "1px solid #444",
+                                backgroundColor: "#2a2a2a",
+                                color: "white",
+                                fontSize: "1rem",
+                                outline: "none",
+                                transition: "border-color 0.2s"
+                            }}
+                            onFocus={(e) => e.target.style.borderColor = "#4A90E2"}
+                            onBlur={(e) => e.target.style.borderColor = "#444"}
+                            value={atAtStartValue}
+                            onChange={(e) => setAtStartValue(e.target.value)}
+                        />
+                        <button
+                            onClick={addAtStart}
+                            style={{
+                                padding: "10px",
+                                borderRadius: "8px",
+                                border: "none",
+                                backgroundColor: "#E24A4A",
+                                color: "white",
+                                fontSize: "0.95rem",
+                                fontWeight: "600",
+                                cursor: "pointer",
+                                marginTop: "4px",
+                                transition: "background-color 0.2s"
+                            }}
+                            onMouseEnter={(e) => e.target.style.backgroundColor = "#C93030"}
+                            onMouseLeave={(e) => e.target.style.backgroundColor = "#E24A4A"}
+                        >
+                            Add At start Node
+                        </button>
+                    </div>
+
+                    {/* ADD AT Index NODE */}
+                    <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "10px" }}>
+                        <label htmlFor="nodeValue" style={{ fontSize: "0.9rem", color: "#bbb", fontWeight: "500" }}>
+                            ADD At Index Node
+                        </label>
+                        <input
+                            id="nodeValue"
+                            type="text"
+                            placeholder="Type value here..."
+                            style={{
+                                padding: "12px",
+                                borderRadius: "8px",
+                                border: "1px solid #444",
+                                backgroundColor: "#2a2a2a",
+                                color: "white",
+                                fontSize: "1rem",
+                                outline: "none",
+                                transition: "border-color 0.2s"
+                            }}
+                            onFocus={(e) => e.target.style.borderColor = "#4A90E2"}
+                            onBlur={(e) => e.target.style.borderColor = "#444"}
+                            value={insertAtValue}
+                            onChange={(e) => setInsertAtValue(e.target.value)}
+                        />
+                        <input
+                            id="nodeValue"
+                            type="text"
+                            placeholder="Type value here..."
+                            style={{
+                                padding: "12px",
+                                borderRadius: "8px",
+                                border: "1px solid #444",
+                                backgroundColor: "#2a2a2a",
+                                color: "white",
+                                fontSize: "1rem",
+                                outline: "none",
+                                transition: "border-color 0.2s"
+                            }}
+                            onFocus={(e) => e.target.style.borderColor = "#4A90E2"}
+                            onBlur={(e) => e.target.style.borderColor = "#444"}
+                            value={insertValue}
+                            onChange={(e) => setInsertValue(e.target.value)}
+                        />
+                        <button
+                            onClick={insertAt}
+                            style={{
+                                padding: "10px",
+                                borderRadius: "8px",
+                                border: "none",
+                                backgroundColor: "#E24A4A",
+                                color: "white",
+                                fontSize: "0.95rem",
+                                fontWeight: "600",
+                                cursor: "pointer",
+                                marginTop: "4px",
+                                transition: "background-color 0.2s"
+                            }}
+                            onMouseEnter={(e) => e.target.style.backgroundColor = "#C93030"}
+                            onMouseLeave={(e) => e.target.style.backgroundColor = "#E24A4A"}
+                        >
+                            Add At Index Node
+                        </button>
+                    </div>
+
+                    <button
+                        onClick={reverseLinkedList}
+                        style={{
+                            padding: "10px",
+                            borderRadius: "8px",
+                            border: "none",
+                            backgroundColor: "#E24A4A",
+                            color: "white",
+                            fontSize: "0.95rem",
+                            fontWeight: "600",
+                            cursor: "pointer",
+                            marginTop: "4px",
+                            transition: "background-color 0.2s"
+                        }}
+                        onMouseEnter={(e) => e.target.style.backgroundColor = "#C93030"}
+                        onMouseLeave={(e) => e.target.style.backgroundColor = "#E24A4A"}
+                    >
+                        reverse
+                    </button>
+                </>
+            )}
+
+            {/* CONDITIONALLY RENDERED FOR DOUBLY LINKED LIST */}
+            {activeTab === 'doubly' && (
+                <>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "10px" }}>
+                        <label htmlFor="doublyDummy" style={{ fontSize: "0.9rem", color: "#bbb", fontWeight: "500" }}>
+                            Doubly Action 1 (Dummy)
+                        </label>
+                        <input
+                            id="doublyDummy"
+                            type="text"
+                            placeholder="Type dummy value here..."
+                            style={{
+                                padding: "12px",
+                                borderRadius: "8px",
+                                border: "1px solid #444",
+                                backgroundColor: "#2a2a2a",
+                                color: "white",
+                                fontSize: "1rem",
+                                outline: "none",
+                                transition: "border-color 0.2s"
+                            }}
+                            value={dvalue}
+                            onChange={(e) => setdValue(e.target.value)}
+                        />
+                        <button
+                            style={{
+                                padding: "10px",
+                                borderRadius: "8px",
+                                border: "none",
+                                backgroundColor: "#E24A4A",
+                                color: "white",
+                                fontSize: "0.95rem",
+                                fontWeight: "600",
+                                cursor: "pointer",
+                                marginTop: "4px",
+                                transition: "background-color 0.2s"
+                            }}
+                            onClick={addDoublyLinkedList}
+                        >
+                            ADD
+                        </button>
+                    </div>
+                </>
+            )}
 
         </div>
     );

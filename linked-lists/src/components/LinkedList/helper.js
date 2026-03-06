@@ -159,13 +159,40 @@ class DoubleLinkedList {
         this.size = 0
     }
 
-    add() {
+    add(data) {
+        console.log("add doubly")
+        // return
+        var newNode = new DoubleNode(data);
 
+        if (this.head == null) {
+            this.head = newNode
+            this.size++
+        } else {
+            var currentNode = this.head;
+
+            while (currentNode.next) {
+                currentNode = currentNode.next;
+            }
+
+            currentNode.next = newNode;
+            newNode.prev = currentNode
+            this.size++
+
+        }
+    }
+
+    getAll() {
+        return this.head;
+    }
+
+    getSize() {
+        return this.size
     }
 
 }
 
-export default LinkedList
+export default LinkedList;
+export { DoubleLinkedList };
 
 
 
